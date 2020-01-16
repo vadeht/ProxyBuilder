@@ -29,37 +29,45 @@ def makeTrans(img):
     img.putdata(newData)
     return img
 
-art = Image.open(ART)
+def proxy(art, card):
 
 
-color = Image.open(COLOR, 'r')
-color = makeTrans(color)
-color_w, color_h = color.size
+    choice = card['colors'][0]
+    colora = '../templates/Colors/' + choice + '.png'
+    backgrounda = '../templates/Backgrounds/' + choice + '.png'
 
-border = Image.open('../templates/Border.png', 'r')
-border = makeTrans(border)
-
-art = art.resize((2300,1680))
-
-canvas=Image.new('RGBA', (FINAL_W, FINAL_H  ), (200,200,200,200))
-
-background = Image.open(BACKGROUND, 'r')
-background = background.resize((FINAL_W-150, FINAL_H-150), Image.NEAREST)
-
-w_color = int(proper_round((FINAL_W-color.size[0])/2, 0))
-h_color = int(proper_round((FINAL_H-color.size[1])/2, 0))
-
-w_background = int(proper_round((FINAL_W-background.size[0])/2, 0))
-h_background = int(proper_round((FINAL_H-background.size[1])/2, 0))
-
-w_art = int(proper_round((FINAL_W-art.size[0])/2, 0))
-h_art = int(proper_round((FINAL_H-art.size[1])/2-568, 0))
+    art = Image.open('./art.png')
 
 
-canvas.paste(background, (w_background, h_background), background.convert('RGBA'))
-canvas.paste(border, (0,0), border.convert('RGBA'))
-canvas.paste(art, (w_art,h_art))
-canvas.paste(color, (w_color, h_color), color.convert('RGBA'))
+    color = Image.open(colora, 'r')
+    color = makeTrans(color)
+    color_w, color_h = color.size
+
+    border = Image.open('../templates/Border.png', 'r')
+    border = makeTrans(border)
+
+    art = art.resize((2300,1680))
 
 
-canvas.save('hopeB.png')
+    canvas=Image.new('RGBA', (FINAL_W, FINAL_H  ), (200,200,200,200))
+
+    background = Image.open(backgrounda, 'r')
+    background = background.resize((FINAL_W-150, FINAL_H-150), Image.NEAREST)
+
+    w_color = int(proper_round((FINAL_W-color.size[0])/2, 0))
+    h_color = int(proper_round((FINAL_H-color.size[1])/2, 0))
+
+    w_background = int(proper_round((FINAL_W-background.size[0])/2, 0))
+    h_background = int(proper_round((FINAL_H-background.size[1])/2, 0))
+
+    w_art = int(proper_round((FINAL_W-art.size[0])/2, 0))
+    h_art = int(proper_round((FINAL_H-art.size[1])/2-568, 0))
+
+
+    canvas.paste(background, (w_background, h_background), background.convert('RGBA'))
+    canvas.paste(border, (0,0), border.convert('RGBA'))
+    canvas.paste(art, (w_art,h_art))
+    canvas.paste(color, (w_color, h_color), color.convert('RGBA'))
+
+
+    canvas.save('./out/' + card['name'] + '.png')
