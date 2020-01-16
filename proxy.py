@@ -1,10 +1,12 @@
 from PIL import Image
 
-ART = '../art.jpg'
-COLOR_CHOICE = 'U'
+ART = '../art2.jpg'
+FINAL_H=3744
+FINAL_W=2688
+COLOR_CHOICE = 'B'
 COLOR_OFFSET = 0
 COLOR = '../templates/Colors/' + COLOR_CHOICE + '.png'
-BACKGROUND = '../templates/Backgrounds' + COLOR_CHOICE + '.png'
+BACKGROUND = '../templates/Backgrounds/' + COLOR_CHOICE + '.png'
 BORDER = '../templates/Border.png'
 
 def proper_round(num, dec=0):
@@ -29,20 +31,35 @@ def makeTrans(img):
 
 art = Image.open(ART)
 
+
 color = Image.open(COLOR, 'r')
 color = makeTrans(color)
 color_w, color_h = color.size
 
 border = Image.open('../templates/Border.png', 'r')
-borderr = border.resize((color_w+250,color_h+400), Image.NEAREST)
-art=art.resize(borderr.size)
-borderr=makeTrans(borderr)
-border_w, border_h = borderr.size
-background = Image.open('../templates/Backgrounds/Gold.png', 'r')
-background = background.resize((border_w, border_h), Image.NEAREST)
-background.paste(borderr, (0,0), borderr.convert('RGBA'))
-w = int(proper_round((border_w-img_w)/2, 0))
-h = int(proper_round((border_h-img_h)/2, 0))
-background.paste(img, (w, h), img.convert('RGBA'))
+border = makeTrans(border)
 
-background.save('hope.png')
+art = art.resize((2300,1680))
+
+canvas=Image.new('RGBA', (FINAL_W, FINAL_H  ), (200,200,200,200))
+
+background = Image.open(BACKGROUND, 'r')
+background = background.resize((FINAL_W-150, FINAL_H-150), Image.NEAREST)
+
+w_color = int(proper_round((FINAL_W-color.size[0])/2, 0))
+h_color = int(proper_round((FINAL_H-color.size[1])/2, 0))
+
+w_background = int(proper_round((FINAL_W-background.size[0])/2, 0))
+h_background = int(proper_round((FINAL_H-background.size[1])/2, 0))
+
+w_art = int(proper_round((FINAL_W-art.size[0])/2, 0))
+h_art = int(proper_round((FINAL_H-art.size[1])/2-568, 0))
+
+
+canvas.paste(background, (w_background, h_background), background.convert('RGBA'))
+canvas.paste(border, (0,0), border.convert('RGBA'))
+canvas.paste(art, (w_art,h_art))
+canvas.paste(color, (w_color, h_color), color.convert('RGBA'))
+
+
+canvas.save('hopeB.png')
