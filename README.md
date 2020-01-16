@@ -5,12 +5,13 @@ Currently if you want to make proxies, you either rip Scryfall scans (low qualit
 ## Usage
 Clone the repo, modify cards.txt with a decklist (a rip from tappedout is supported, but probably anything is supported). 
 
-python3 ProxyBuilder.py
+python3 main.py
 
 ## Requirements
  - Requests
  - Scrython
  - Pillow
+ - ImageIO
  
- ## Examples
- See Examples folder for most recent best examples. Remember, this repo is currently early so the best examples aren't great.
+## Examples
+See Examples folder for most recent best examples. Remember, this repo is currently early so the best examples aren't great. The examples contain the cards.txt and the resulting files. They are generated completely automatically. Magic!
