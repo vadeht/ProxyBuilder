@@ -2,7 +2,8 @@
 
 Build Magic: the Gathering proxies from scratch using nothing but Python3.
 
-#Requirements
+# Requirements
+
 Scrython
 Pillow
 Requests
