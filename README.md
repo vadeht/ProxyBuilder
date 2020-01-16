@@ -11,3 +11,6 @@ python3 ProxyBuilder.py
  - Requests
  - Scrython
  - Pillow
+ 
+ ## Examples
+ See Examples folder for most recent best examples. Remember, this repo is currently early so the best examples aren't great.
