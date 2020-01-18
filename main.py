@@ -1,8 +1,10 @@
 import scrython
 import imageio
 import requests
-import time
 import proxy
+import time
+
+
 
 
 def process_card(cardname, expansion=None):
@@ -44,4 +46,6 @@ def main():
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     main()
+    print("--- %s seconds ---" % (time.time() - start_time))

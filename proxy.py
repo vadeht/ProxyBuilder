@@ -1,4 +1,7 @@
 from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
+
 
 ART = '../art2.jpg'
 FINAL_H=3744
@@ -63,18 +66,32 @@ def proxy(art, card):
     h_background = int((FINAL_H-background.size[1])/2)
 
     w_art = int((FINAL_W-art.size[0])/2)
-    h_art = int((FINAL_H-art.size[1])/2-600)
+    h_art = int((FINAL_H-art.size[1])/2-620)
 
     w_titlebox = int((FINAL_W-titlebox.size[0])/2)
     h_titlebox = int((FINAL_H - titlebox.size[1]+20) / 2)
 
 
 
-    canvas.paste(background, (w_background, h_background), background.convert('RGBA'))
-    canvas.paste(border, (0,0), border.convert('RGBA'))
+    canvas.paste(background, (w_background, h_background), background)
+    canvas.paste(border, (0,0), border)
     canvas.paste(art, (w_art,h_art))
-    canvas.paste(color, (w_color, h_color), color.convert('RGBA'))
-    canvas.paste(titlebox, (w_titlebox, h_titlebox), titlebox.convert('RGBA'))
+    canvas.paste(color, (w_color, h_color), color)
+    canvas.paste(titlebox, (w_titlebox, h_titlebox), titlebox)
+
+    draw = ImageDraw.Draw(canvas)
+    # font = ImageFont.truetype(<font-file>, <font-size>)
+    title_font = ImageFont.truetype("Beleren2016-Bold.ttf", 160)
+    type_font =     ImageFont.truetype("Beleren2016-Bold.ttf", 140)
+    rules_font =    ImageFont.truetype("MPlantin.ttf", 140)
+    # draw.text((x, y),"Sample Text",(r,g,b))
+    draw.text((220, 225), card['name'], (0, 0, 0), font=title_font)
+    draw.text((220, 2160), card['type_line'], (0, 0, 0), font=type_font)
+    draw.text((240, 2570), card['oracle_text'], (0, 0, 0), font=rules_font)
+
 
 
     canvas.save('./out/' + card['name'] + '.png')
+
+
+    #canvas.save('./out/' + card['name'] + '.png')
