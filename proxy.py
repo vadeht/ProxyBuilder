@@ -1,6 +1,7 @@
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
+import textwrap
 
 
 ART = './art2.jpg'
@@ -12,25 +13,55 @@ COLOR = './Templates/New/Box/' + COLOR_CHOICE + '.png'
 BACKGROUND = './Templates/New/Backgrounds/' + COLOR_CHOICE + '.png'
 BORDER = './Templates/New/Border.png'
 
-def proper_round(num, dec=0):
-    num = str(num)[:str(num).index('.')+dec+2]
-    if num[-1]>='5':
-        return float(num[:-2-(not dec)]+str(int(num[-2-(not dec)])+1))
-    return float(num[:-1])
+def write_oracle_text(text, draw):
 
-def makeTrans(img):
-    img = img.convert("RGBA")
-    datas = img.getdata()
+    #No differentiation between new lines for paragrahs irl and new lines that i put in for the wrap formatting. ie snapcaster should have
+    #flash distinct from the second paragraph
+    margin = 240
+    offset = 2570
 
-    newData = []
-    for item in datas:
-        if item[0] == 255 and item[1] == 255 and item[2] == 255:
-            newData.append((255, 255, 255, 0))
-        else:
-            newData.append(item)
+    oracle_font = ImageFont.truetype(r"C:\Users\teved\AppData\Local\Microsoft\Windows\Fonts\MPlantin.ttf", 130)
 
-    img.putdata(newData)
-    return img
+    real_oracle_text=text.split('(')[0]
+
+
+    real_oracle_text = '\n'.join(['\n'.join(textwrap.wrap(line, 35,
+                break_long_words=False, replace_whitespace=False))
+                for line in real_oracle_text.splitlines() if line.strip() != ''])
+
+    nlines = real_oracle_text.count('\n')
+    print(nlines)
+    print(real_oracle_text)
+    draw.text((margin, offset-nlines*32), real_oracle_text, (0, 0, 0), font=oracle_font, spacing=40)
+
+
+'''
+    try:
+
+
+        reminder_oracle_text=text.split('(')[1]
+        
+        reminder_oracle_text = '\n'.join(['\n'.join(textwrap.wrap(line, 35,
+                    break_long_words=False, replace_whitespace=False))
+                    for line in reminder_oracle_text.splitlines() if line.strip() != ''])
+
+        
+        draw.text((margin, offset-nlines*40), reminder_oracle_text, (100, 100, 100), font=oracle_font, spacing=40)
+    
+    except:
+        print('skip')
+
+
+
+    
+    
+    margin = 240 
+    offset = 2570
+    for line in textwrap.wrap(text, width=35,break_long_words=False,replace_whitespace=False):
+        draw.text((margin, offset), line, (0, 0, 0), font=oracle_font)
+        offset += oracle_font.getsize(line)[1]
+    '''
+
 
 def proxy(art, card):
 
@@ -87,7 +118,9 @@ def proxy(art, card):
     # draw.text((x, y),"Sample Text",(r,g,b))
     draw.text((220, 225), card['name'], (0, 0, 0), font=title_font)
     draw.text((220, 2160), card['type_line'], (0, 0, 0), font=type_font)
-    draw.text((240, 2570), card['oracle_text'], (0, 0, 0), font=rules_font)
+
+    write_oracle_text(card['oracle_text'], draw)
+
 
 
 

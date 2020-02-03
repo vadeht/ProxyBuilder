@@ -31,7 +31,7 @@ def process_card(cardname, expansion=None):
 
     proxy.proxy(im, card)
 
-
+ 
 def main():
     with open('cards.txt', 'r') as cards:
         for card in cards:
