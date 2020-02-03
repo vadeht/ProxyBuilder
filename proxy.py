@@ -2,16 +2,9 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 import textwrap
+import constants as co
 
 
-ART = './art2.jpg'
-FINAL_H=3744
-FINAL_W=2688
-COLOR_CHOICE = 'B'
-COLOR_OFFSET = 0
-COLOR = './Templates/New/Box/' + COLOR_CHOICE + '.png'
-BACKGROUND = './Templates/New/Backgrounds/' + COLOR_CHOICE + '.png'
-BORDER = './Templates/New/Border.png'
 
 def write_oracle_text(text, draw):
 
@@ -62,6 +55,31 @@ def write_oracle_text(text, draw):
         offset += oracle_font.getsize(line)[1]
     '''
 
+def convert_cost(mana_cost):
+    #https://www.pydanny.com/why-doesnt-python-have-switch-case.html#dispatch-methods-for-classes
+    return_cost = ''
+    for symbol in mana_cost:
+        if symbol == '{' or symbol == '}':
+            return_cost = return_cost
+        elif symbol == 'W':
+            return_cost += co.W_SYMBOL
+        elif symbol == 'U':
+            return_cost += co.U_SYMBOL
+        elif symbol == 'B':
+            return_cost += co.B_SYMBOL
+        elif symbol == 'R':
+            return_cost += co.R_SYMBOL
+        elif symbol == 'G':
+            return_cost += co.G_SYMBOL
+        elif symbol == '1':
+            return_cost += co.NUMBER_1_SYMBOL
+        elif symbol == '2':
+            return_cost += co.NUMBER_2_SYMBOL
+
+
+    return return_cost
+
+
 
 def proxy(art, card):
 
@@ -85,22 +103,22 @@ def proxy(art, card):
     titlebox = Image.open('./Templates/New/Title/' + choice + '.png')
 
 
-    canvas=Image.new('RGBA', (FINAL_W, FINAL_H  ), (200,200,200,200))
+    canvas=Image.new('RGBA', (co.FINAL_W, co.FINAL_H  ), (200,200,200,200))
 
     background = Image.open(backgrounda, 'r')
-    background = background.resize((FINAL_W-150, FINAL_H-150), Image.NEAREST)
+    background = background.resize((co.FINAL_W-150, co.FINAL_H-150), Image.NEAREST)
 
-    w_color = int((FINAL_W-color.size[0])/2)
-    h_color = int((FINAL_H-color.size[1] - 100)/2)
+    w_color = int((co.FINAL_W-color.size[0])/2)
+    h_color = int((co.FINAL_H-color.size[1] - 100)/2)
 
-    w_background = int((FINAL_W-background.size[0])/2)
-    h_background = int((FINAL_H-background.size[1])/2)
+    w_background = int((co.FINAL_W-background.size[0])/2)
+    h_background = int((co.FINAL_H-background.size[1])/2)
 
-    w_art = int((FINAL_W-art.size[0])/2)
-    h_art = int((FINAL_H-art.size[1])/2-620)
+    w_art = int((co.FINAL_W-art.size[0])/2)
+    h_art = int((co.FINAL_H-art.size[1])/2-620)
 
-    w_titlebox = int((FINAL_W-titlebox.size[0])/2)
-    h_titlebox = int((FINAL_H - titlebox.size[1]+20) / 2)
+    w_titlebox = int((co.FINAL_W-titlebox.size[0])/2)
+    h_titlebox = int((co.FINAL_H - titlebox.size[1]+20) / 2)
 
 
 
@@ -112,12 +130,17 @@ def proxy(art, card):
 
     draw = ImageDraw.Draw(canvas)
     # font = ImageFont.truetype(<font-file>, <font-size>)
-    title_font = ImageFont.truetype("./Templates/Fonts/Beleren2016-Bold.ttf", 160)
-    type_font =     ImageFont.truetype("./Templates/Fonts/Beleren2016-Bold.ttf", 140)
-    rules_font =    ImageFont.truetype("./Templates/Fonts/MPlantin.ttf", 140)
+    title_font = ImageFont.truetype("./Templates/Fonts/Beleren2016-Bold.ttf", co.TITLE_FONT_SIZE)
+    type_font = ImageFont.truetype("./Templates/Fonts/Beleren2016-Bold.ttf", co.TYPE_FONT_SIZE)
+    rules_font = ImageFont.truetype("./Templates/Fonts/MPlantin.ttf", co.RULES_FONT_SIZE)
+    mana_font = ImageFont.truetype("./Templates/Fonts/mana.ttf", co.MANA_FONT_SIZE)
+    mana_cost = convert_cost(card['mana_cost'])
+    mana_offset = (draw.textsize(mana_cost, font=mana_font))
+
     # draw.text((x, y),"Sample Text",(r,g,b))
-    draw.text((220, 225), card['name'], (0, 0, 0), font=title_font)
-    draw.text((220, 2160), card['type_line'], (0, 0, 0), font=type_font)
+    draw.text((co.TITLE_X, co.TITLE_Y), card['name'], (0, 0, 0), font=title_font)
+    draw.text((co.TYPE_X, co.TYPE_Y), card['type_line'], (0, 0, 0), font=type_font)
+    draw.text((co.MANA_X - mana_offset[0], co.MANA_Y), mana_cost, (0,0,0), font=mana_font)
 
     write_oracle_text(card['oracle_text'], draw)
 
