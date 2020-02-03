@@ -3,14 +3,14 @@ from PIL import ImageFont
 from PIL import ImageDraw
 
 
-ART = '../art2.jpg'
+ART = './art2.jpg'
 FINAL_H=3744
 FINAL_W=2688
 COLOR_CHOICE = 'B'
 COLOR_OFFSET = 0
-COLOR = '../Templates/Colors/' + COLOR_CHOICE + '.png'
-BACKGROUND = '../Templates/Backgrounds/' + COLOR_CHOICE + '.png'
-BORDER = '../Templates/Border.png'
+COLOR = './Templates/New/Box/' + COLOR_CHOICE + '.png'
+BACKGROUND = './Templates/New/Backgrounds/' + COLOR_CHOICE + '.png'
+BORDER = './Templates/New/Border.png'
 
 def proper_round(num, dec=0):
     num = str(num)[:str(num).index('.')+dec+2]
@@ -36,8 +36,8 @@ def proxy(art, card):
 
 
     choice = card['colors'][0]
-    colora = '../Templates/Colors/' + choice + '.png'
-    backgrounda = '../Templates/Backgrounds/' + choice + '.png'
+    colora = './Templates/New/Box/' + choice + '.png'
+    backgrounda = './Templates/New/Background/' + choice + '.png'
 
     art = Image.open('./art.png')
 
@@ -46,12 +46,12 @@ def proxy(art, card):
     #color = makeTrans(color)
     color_w, color_h = color.size
 
-    border = Image.open('../Templates/Border.png', 'r')
+    border = Image.open('./Templates/New/Border/Border.png', 'r')
     #border = makeTrans(border)
 
     art = art.resize((2300,1680))
 
-    titlebox = Image.open('../Templates/TitleBox/' + choice + '.png')
+    titlebox = Image.open('./Templates/New/Title/' + choice + '.png')
 
 
     canvas=Image.new('RGBA', (FINAL_W, FINAL_H  ), (200,200,200,200))
@@ -81,9 +81,9 @@ def proxy(art, card):
 
     draw = ImageDraw.Draw(canvas)
     # font = ImageFont.truetype(<font-file>, <font-size>)
-    title_font = ImageFont.truetype("Beleren2016-Bold.ttf", 160)
-    type_font =     ImageFont.truetype("Beleren2016-Bold.ttf", 140)
-    rules_font =    ImageFont.truetype("MPlantin.ttf", 140)
+    title_font = ImageFont.truetype("./Templates/Fonts/Beleren2016-Bold.ttf", 160)
+    type_font =     ImageFont.truetype("./Templates/Fonts/Beleren2016-Bold.ttf", 140)
+    rules_font =    ImageFont.truetype("./Templates/Fonts/MPlantin.ttf", 140)
     # draw.text((x, y),"Sample Text",(r,g,b))
     draw.text((220, 225), card['name'], (0, 0, 0), font=title_font)
     draw.text((220, 2160), card['type_line'], (0, 0, 0), font=type_font)
