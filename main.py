@@ -3,25 +3,35 @@ import imageio
 import requests
 import proxy
 import time
-
-
-
+import json
+import constants as co
 
 def process_card(cardname, expansion=None):
-    try:
-        # If the card specifies which set to retrieve the scan from, do that
-        if expansion:
-            # Set specified from set formatter
-            query = "!\"" + cardname + "\" set=" + expansion
-            print("Processing: " + cardname + ", set: " + expansion)
-        else:
-            query = "!\"" + cardname + "\""
-            print("Processing: " + cardname)
-        card = scrython.cards.Search(q=query).data()[0]
 
-    except scrython.foundation.ScryfallError:
-        print("Couldn't find card: " + cardname)
-        return
+    if co.DEBUG == 1:
+        with open('data.json') as handle:
+            card = json.loads(handle.read())
+    else:
+
+        try:
+            # If the card specifies which set to retrieve the scan from, do that
+            if expansion:
+                # Set specified from set formatter
+                query = "!\"" + cardname + "\" set=" + expansion
+                print("Processing: " + cardname + ", set: " + expansion)
+            else:
+                query = "!\"" + cardname + "\""
+                print("Processing: " + cardname)
+            card = scrython.cards.Search(q=query).data()[0]
+            #with open('data.json', 'w') as f:
+                #f.write(json.dumps(card))
+
+        except scrython.foundation.ScryfallError:
+            print("Couldn't find card: " + cardname)
+            return
+
+
+
 
     cardname = card["name"].replace("//", "&")  # should work on macOS & windows now
     cardname = cardname.replace(":", "")  # case for Circle of Protection:
